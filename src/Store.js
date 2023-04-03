@@ -7,9 +7,11 @@ export const useStore = defineStore('store', () => {
   const loading = ref(false);
   const searchTerm = ref('');
   const sortKey = ref('');
+  const planetName = ref('');
+  const togglePlanetInfo = ref(false);
   const sortAscDesc = ref(true);
 
-  //===== FETCH 'PEOPLE' AND 'PLANET' DATA FROM SWAPI AND CACHE IN LOCAL STORAGE
+  //===== fetch 'people' and 'planet' data from SWAPI, then cache in local storage
   async function fetchAndSetAPIData(type, numOfPages, destPiniaArr) {
     loading.value = true;
     //===== push page endpoints to array
@@ -41,6 +43,8 @@ export const useStore = defineStore('store', () => {
     loading,
     searchTerm,
     sortKey,
+    planetName,
+    togglePlanetInfo,
     sortAscDesc,
     fetchAndSetAPIData,
   };

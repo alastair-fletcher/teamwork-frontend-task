@@ -43,7 +43,6 @@
     <div class="starwars-logo">
       <img alt="starwars logo" src="./assets/starwars.png" height="160" />
     </div>
-
     <!-- search filter input -->
     <input
       type="text"
@@ -51,7 +50,6 @@
       placeholder="Search by name or planet ..."
       v-model="searchTerm"
     />
-
     <!-- swapi table -->
     <div class="swapi-table">
       <table>
@@ -94,26 +92,37 @@
                 }}</span>
               </div>
             </td>
-            <td>
+            <td @click="setPlanetName(person.planetName)" class="planet-column">
               {{ person.planetName }}
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+    <PlanetInfo v-if="togglePlanetInfo" />
   </div>
 </template>
 
 <script setup>
 import { onMounted, computed } from 'vue';
 import { RadarSpinner } from 'epic-spinners';
+import PlanetInfo from './components/PlanetInfo.vue';
 import { useStore } from './Store';
 import { storeToRefs } from 'pinia';
 const store = useStore();
 const { fetchAndSetAPIData } = store;
-const { peopleArr, planetsArr, loading, searchTerm, sortKey, sortAscDesc } =
-  storeToRefs(store);
+const {
+  peopleArr,
+  planetsArr,
+  loading,
+  searchTerm,
+  sortKey,
+  planetName,
+  togglePlanetInfo,
+  sortAscDesc,
+} = storeToRefs(store);
 
+//========= check if data is in local storage, if not fetch from API
 onMounted(async () => {
   const peopleData = localStorage.getItem('people');
   const planetsData = localStorage.getItem('planets');
@@ -126,9 +135,18 @@ onMounted(async () => {
   }
 });
 
+//========= set key to sort data by, e.g. 'name', 'height' + toggle asc/desc
 const setSortKey = (key) => {
   sortAscDesc.value = !sortAscDesc.value;
   sortKey.value = key;
+};
+
+//========= set planet name to show popup with planet information
+const setPlanetName = (planetInf) => {
+  planetInf !== 'unknown'
+    ? (planetName.value = planetInf)
+    : (planetName.value = '');
+  togglePlanetInfo.value = true;
 };
 
 //========= add units to non 'unknown' data + remove annoying comma
@@ -136,8 +154,10 @@ const formatHeightMass = (data, unit) => {
   return data === 'unknown' ? data : `${data.replace(',', '')} ${unit}`;
 };
 
+//========= format date and time + separate for CSS styling
 const formatDate = (date) => new Date(date).toLocaleString().split(',');
 
+//========= table heading names and keys
 const headingData = [
   { name: 'Name', key: 'name' },
   { name: 'Height', key: 'height' },
@@ -147,6 +167,7 @@ const headingData = [
   { name: 'Planet', key: 'planetName' },
 ];
 
+//========= make data filterable and sortable
 const filteredData = computed(() => {
   const filtered = peopleArr.value
     //========= get 'planet name' and add to person row
@@ -174,9 +195,11 @@ const filteredData = computed(() => {
     if (!sortKey.value) {
       return filtered;
     }
-    //========= check if sortKey refers to 'mass' or 'height'
+
+    //========= check if sortKey refers to 'mass' or 'height' (for sorting numerically)
     const isNumeric = ['mass', 'height'].includes(sortKey.value);
-    //========= if sortKey is for 'mass' or 'height', separate 'unknown' and numeric values
+
+    //========= if sortKey IS for 'mass' or 'height', separate 'unknown' and numeric values
     if (isNumeric) {
       const separateUnknownAndNumericValues = (column) => {
         const unknown = [];
@@ -193,6 +216,7 @@ const filteredData = computed(() => {
         separateUnknownAndNumericValues('mass');
       const [heightNumerics, heightUnknowns] =
         separateUnknownAndNumericValues('height');
+
       //========= sort numerically and concatenate 'unknowns' to end
       const sortNumColumns = (columnType) => {
         return sortAscDesc.value
@@ -211,6 +235,7 @@ const filteredData = computed(() => {
         ? sortNumColumns(massNumerics).concat(massUnknowns)
         : sortNumColumns(heightNumerics).concat(heightUnknowns);
     } else {
+      //========= OR, sort alphabetically
       return sortAscDesc.value
         ? filtered.sort((a, b) =>
             a[sortKey.value] > b[sortKey.value] ? 1 : -1
