@@ -1,13 +1,13 @@
-import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { defineStore } from "pinia";
+import { ref } from "vue";
 
-export const useStore = defineStore('store', () => {
+export const useStore = defineStore("store", () => {
   const peopleArr = ref([]);
   const planetsArr = ref([]);
   const loading = ref(false);
-  const searchTerm = ref('');
-  const sortKey = ref('');
-  const planetName = ref('');
+  const searchTerm = ref("");
+  const sortKey = ref("");
+  const planetName = ref("");
   const togglePlanetInfo = ref(false);
   const sortAscDesc = ref(true);
 
