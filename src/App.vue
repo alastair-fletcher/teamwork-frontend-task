@@ -17,36 +17,35 @@
     class="h-screen relative w-9/12 flex flex-col mx-auto mt-[8em] animate-[fadeIn_1s_ease]"
     v-if="!loading"
   >
-    <div class="self-end absolute top-[-4em] z-10 w-80">
-      <img alt="Starwars logo" src="./assets/starwars.png" />
+    <div class="self-end flex absolute top-[-4em] right-[-1.5em] z-10">
+      <div class="flex items-center self-end">
+        <img
+          alt="Teamwork logo"
+          src="./assets/teamwork.svg"
+          class="flex justify-center ml-4 rounded-lg h-8 bg-slate-100"
+        />
+        <img
+          alt="Vue logo"
+          src="./assets/vue-logo.svg"
+          width="32"
+          height="32"
+          class="ml-4"
+        />
+        <img
+          alt="Pinia logo"
+          src="./assets/pinia-logo.svg"
+          width="32"
+          height="32"
+          class="ml-4"
+        />
+      </div>
+      <img alt="Starwars logo" src="./assets/starwars.png" class="w-80" />
     </div>
+    <!-- footer with logos -->
 
     <!-- search and table -->
     <SWAPITable />
     <PlanetInfo v-if="togglePlanetInfo" />
-
-    <!-- footer with logos -->
-    <footer class="self-end fixed bottom-6 flex items-center">
-      <img
-        alt="Teamwork logo"
-        src="./assets/teamwork.svg"
-        class="flex justify-center ml-4 rounded-lg h-8 bg-slate-100"
-      />
-      <img
-        alt="Vue logo"
-        src="./assets/vue-logo.svg"
-        width="32"
-        height="32"
-        class="ml-4"
-      />
-      <img
-        alt="Pinia logo"
-        src="./assets/pinia-logo.svg"
-        width="32"
-        height="32"
-        class="ml-4"
-      />
-    </footer>
   </div>
 </template>
 

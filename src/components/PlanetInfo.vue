@@ -3,15 +3,19 @@
     class="w-full flex items-center justify-between h-12 p-3 rounded-lg bg-emerald-300 text-emerald-800 animate-[fadeIn_1s_ease]"
   >
     <ul class="w-10/12 flex justify-between list-none">
-      <li><span class="font-bold">Name: </span> {{ planetDetails.name }}</li>
       <li>
-        <span class="font-bold">Diameter: </span> {{ planetDetails.diameter }}
+        <span class="font-bold mr-3">Name: </span> {{ planetDetails.name }}
       </li>
       <li>
-        <span class="font-bold">Climate: </span> {{ planetDetails.climate }}
+        <span class="font-bold mr-3">Diameter: </span>
+        {{ planetDetails.diameter }}
       </li>
       <li>
-        <span class="font-bold">Population: </span>
+        <span class="font-bold mr-3">Climate: </span>
+        {{ planetDetails.climate }}
+      </li>
+      <li>
+        <span class="font-bold mr-3">Population: </span>
         {{ planetDetails.population }}
       </li>
     </ul>

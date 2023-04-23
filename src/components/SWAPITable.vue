@@ -9,7 +9,7 @@
 
   <!-- SWAPI table -->
   <div
-    class="w-full overflow-auto my-6 max-h-[440px] rounded-lg scrollbar-rounded"
+    class="w-full overflow-auto my-8 max-h-[440px] rounded-lg scrollbar-rounded"
   >
     <table class="w-full bg-slate-50">
       <!-- table headings -->
