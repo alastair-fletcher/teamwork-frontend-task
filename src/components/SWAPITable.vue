@@ -1,7 +1,7 @@
 <template>
   <!-- search filter input -->
   <input
-    type="text"
+    type="search"
     class="w-1/3 rounded-full p-4"
     placeholder="Search by name or planet ..."
     v-model="searchTerm"
