@@ -1,100 +1,3 @@
-<template>
-  <!-- search filter input -->
-  <input
-    type="search"
-    class="w-1/3 rounded-full p-4"
-    placeholder="Search by name or planet ..."
-    v-model="searchTerm"
-  />
-
-  <!-- SWAPI table -->
-  <div
-    class="w-full overflow-auto my-8 max-h-[440px] rounded-lg scrollbar-rounded"
-  >
-    <table class="w-full bg-slate-50">
-      <!-- table headings -->
-      <thead class="sticky top-0 z-1">
-        <tr class="hover:cursor-pointer">
-          <th
-            v-for="heading in headingData"
-            :key="heading.key"
-            class="bg-slate-200 p-3 hover:bg-slate-300"
-            :class="{
-              'column-active': heading.key === isActive,
-            }"
-            @click="setSortKey(heading.key)"
-          >
-            <div class="flex items-center">
-              <span>{{ heading.name }}</span>
-              <span
-                class="ml-4"
-                :class="{
-                  'arrow-asc-desc': heading.key === isActive && !sortAscDesc,
-                  'hide-arrow': heading.key !== isActive,
-                }"
-              >
-                <svg
-                  width="8px"
-                  height="12px"
-                  viewBox="0 0 8 12"
-                  version="1.1"
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlns:xlink="http://www.w3.org/1999/xlink"
-                >
-                  <g stroke="none" stroke-width="1" fill="#3c55bd">
-                    <path
-                      d="M0.330789387,3.85823193 C0.477227032,3.98374992 0.714664757,3.98374992 0.861133655,3.85823193 L3.46876113,1.61015811 L3.46876113,11.6785709 C3.46876113,11.8560801 3.63666749,12 3.84376144,12 L4.15626176,12 C4.36335572,12 4.53126208,11.8560801 4.53126208,11.6785709 L4.53126208,1.61015811 L7.13888995,3.85823193 C7.28532759,3.98374992 7.52276506,3.98374992 7.66923396,3.85823193 L7.89017169,3.66882992 C8.03660933,3.54331192 8.03660933,3.33979402 7.89017169,3.21427603 L4.26516819,0.0941385001 C4.11873055,-0.0313794941 3.88129276,-0.0313794941 3.73482386,0.0941385001 L0.109851668,3.21427603 C-0.0366172294,3.33979402 -0.0366172294,3.54331192 0.109851668,3.66882992 L0.330789387,3.85823193 Z"
-                    ></path>
-                  </g>
-                </svg>
-              </span>
-            </div>
-          </th>
-        </tr>
-      </thead>
-
-      <!-- table data -->
-      <tbody>
-        <tr
-          v-for="person in filteredData"
-          :key="person.url"
-          class="hover:bg-emerald-100"
-        >
-          <td class="p-3 w-24">{{ person.name }}</td>
-          <td class="p-3 w-24">{{ person.height }}</td>
-          <td class="p-3 w-24">{{ person.mass }}</td>
-          <td class="p-3 w-24">
-            <div class="flex flex-col align-start">
-              <span class="text-xs font-bold">{{
-                formatDate(person.created)[0]
-              }}</span>
-              <span class="text-xs text-stone-400">{{
-                formatDate(person.created)[1]
-              }}</span>
-            </div>
-          </td>
-          <td class="p-3 w-24">
-            <div class="flex flex-col align-start">
-              <span class="text-xs font-bold">{{
-                formatDate(person.edited)[0]
-              }}</span>
-              <span class="text-xs text-stone-400">{{
-                formatDate(person.edited)[1]
-              }}</span>
-            </div>
-          </td>
-          <td
-            @click="setPlanetName(person.planetName)"
-            class="hover:cursor-pointer hover:font-bold p-3 w-24"
-          >
-            {{ person.planetName }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</template>
-
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import { useStore } from "../Store";
@@ -240,6 +143,103 @@ const setPlanetName = (planetInf) => {
   togglePlanetInfo.value = true;
 };
 </script>
+
+<template>
+  <!-- search filter input -->
+  <input
+    type="search"
+    class="w-1/3 rounded-full p-4"
+    placeholder="Search by name or planet ..."
+    v-model="searchTerm"
+  />
+
+  <!-- SWAPI table -->
+  <div
+    class="w-full overflow-auto my-8 max-h-[440px] rounded-lg scrollbar-rounded"
+  >
+    <table class="w-full bg-slate-50">
+      <!-- table headings -->
+      <thead class="sticky top-0 z-1">
+        <tr class="hover:cursor-pointer">
+          <th
+            v-for="heading in headingData"
+            :key="heading.key"
+            class="bg-slate-200 p-3 hover:bg-slate-300"
+            :class="{
+              'column-active': heading.key === isActive,
+            }"
+            @click="setSortKey(heading.key)"
+          >
+            <div class="flex items-center">
+              <span>{{ heading.name }}</span>
+              <span
+                class="ml-4"
+                :class="{
+                  'arrow-asc-desc': heading.key === isActive && !sortAscDesc,
+                  'hide-arrow': heading.key !== isActive,
+                }"
+              >
+                <svg
+                  width="8px"
+                  height="12px"
+                  viewBox="0 0 8 12"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                >
+                  <g stroke="none" stroke-width="1" fill="#3c55bd">
+                    <path
+                      d="M0.330789387,3.85823193 C0.477227032,3.98374992 0.714664757,3.98374992 0.861133655,3.85823193 L3.46876113,1.61015811 L3.46876113,11.6785709 C3.46876113,11.8560801 3.63666749,12 3.84376144,12 L4.15626176,12 C4.36335572,12 4.53126208,11.8560801 4.53126208,11.6785709 L4.53126208,1.61015811 L7.13888995,3.85823193 C7.28532759,3.98374992 7.52276506,3.98374992 7.66923396,3.85823193 L7.89017169,3.66882992 C8.03660933,3.54331192 8.03660933,3.33979402 7.89017169,3.21427603 L4.26516819,0.0941385001 C4.11873055,-0.0313794941 3.88129276,-0.0313794941 3.73482386,0.0941385001 L0.109851668,3.21427603 C-0.0366172294,3.33979402 -0.0366172294,3.54331192 0.109851668,3.66882992 L0.330789387,3.85823193 Z"
+                    ></path>
+                  </g>
+                </svg>
+              </span>
+            </div>
+          </th>
+        </tr>
+      </thead>
+
+      <!-- table data -->
+      <tbody>
+        <tr
+          v-for="person in filteredData"
+          :key="person.url"
+          class="hover:bg-emerald-100"
+        >
+          <td class="p-3 w-24">{{ person.name }}</td>
+          <td class="p-3 w-24">{{ person.height }}</td>
+          <td class="p-3 w-24">{{ person.mass }}</td>
+          <td class="p-3 w-24">
+            <div class="flex flex-col align-start">
+              <span class="text-xs font-bold">{{
+                formatDate(person.created)[0]
+              }}</span>
+              <span class="text-xs text-stone-400">{{
+                formatDate(person.created)[1]
+              }}</span>
+            </div>
+          </td>
+          <td class="p-3 w-24">
+            <div class="flex flex-col align-start">
+              <span class="text-xs font-bold">{{
+                formatDate(person.edited)[0]
+              }}</span>
+              <span class="text-xs text-stone-400">{{
+                formatDate(person.edited)[1]
+              }}</span>
+            </div>
+          </td>
+          <td
+            @click="setPlanetName(person.planetName)"
+            class="hover:cursor-pointer hover:font-bold p-3 w-24"
+          >
+            {{ person.planetName }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
 
 <style lang="scss">
 .scrollbar-rounded::-webkit-scrollbar {

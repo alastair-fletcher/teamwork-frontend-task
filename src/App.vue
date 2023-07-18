@@ -1,3 +1,14 @@
+<script setup>
+import LoadingSpinner from "./components/LoadingSpinner.vue";
+import SWAPITable from "./components/SWAPITable.vue";
+import PlanetInfo from "./components/PlanetInfo.vue";
+import { useStore } from "./Store";
+import { storeToRefs } from "pinia";
+const store = useStore();
+
+const { loading, togglePlanetInfo } = storeToRefs(store);
+</script>
+
 <template>
   <!-- starry sky -->
   <div class="stars"></div>

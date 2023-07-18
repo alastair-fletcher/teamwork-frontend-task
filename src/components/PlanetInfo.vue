@@ -1,3 +1,19 @@
+<script setup>
+import { computed } from "vue";
+import { useStore } from "../Store";
+import { storeToRefs } from "pinia";
+const store = useStore();
+const { planetsArr, planetName, togglePlanetInfo } = storeToRefs(store);
+
+//===== close 'planet info' popup
+const closePlanetInfo = () => (togglePlanetInfo.value = false);
+
+//===== get planet information for selected planet
+const planetDetails = computed(() => {
+  return planetsArr.value.find((planet) => planet.name === planetName.value);
+});
+</script>
+
 <template>
   <div
     class="w-full flex items-center justify-between h-12 p-3 rounded-lg bg-emerald-300 text-emerald-800 animate-[fadeIn_1s_ease]"
@@ -27,19 +43,3 @@
     </button>
   </div>
 </template>
-
-<script setup>
-import { computed } from "vue";
-import { useStore } from "../Store";
-import { storeToRefs } from "pinia";
-const store = useStore();
-const { planetsArr, planetName, togglePlanetInfo } = storeToRefs(store);
-
-//===== close 'planet info' popup
-const closePlanetInfo = () => (togglePlanetInfo.value = false);
-
-//===== get planet information for selected planet
-const planetDetails = computed(() => {
-  return planetsArr.value.find((planet) => planet.name === planetName.value);
-});
-</script>
