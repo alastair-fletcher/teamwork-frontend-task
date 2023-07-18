@@ -15,18 +15,11 @@ const { loading, togglePlanetInfo } = storeToRefs(store);
   <div class="stars2"></div>
   <div class="stars3"></div>
 
-  <!-- loading spinner -->
-  <RadarSpinner
-    :animation-duration="1500"
-    :size="400"
-    color="rgb(244, 252, 30)"
-    class="mx-auto my-40"
-    v-if="loading"
-  />
+  <LoadingSpinner v-if="loading" />
 
   <div
+    v-else
     class="h-screen relative w-9/12 flex flex-col mx-auto mt-[8em] animate-[fadeIn_1s_ease]"
-    v-if="!loading"
   >
     <div class="self-end flex absolute top-[-4em] right-[-1.5em] z-10">
       <div class="flex items-center self-end">
@@ -52,24 +45,11 @@ const { loading, togglePlanetInfo } = storeToRefs(store);
       </div>
       <img alt="Starwars logo" src="./assets/starwars.png" class="w-80" />
     </div>
-    <!-- footer with logos -->
 
-    <!-- search and table -->
     <SWAPITable />
     <PlanetInfo v-if="togglePlanetInfo" />
   </div>
 </template>
-
-<script setup>
-import { RadarSpinner } from "epic-spinners";
-import SWAPITable from "./components/SWAPITable.vue";
-import PlanetInfo from "./components/PlanetInfo.vue";
-import { useStore } from "./Store";
-import { storeToRefs } from "pinia";
-const store = useStore();
-
-const { loading, togglePlanetInfo } = storeToRefs(store);
-</script>
 
 <style lang="scss">
 @import "./styles/variables";
