@@ -3,12 +3,12 @@ import { computed } from "vue";
 import { useStore } from "../Store";
 import { storeToRefs } from "pinia";
 const store = useStore();
-const { planetsArr, planetName, togglePlanetInfo } = storeToRefs(store);
+const { planetsArr, planetName, showPlanetInfo } = storeToRefs(store);
 
-//===== close 'planet info' popup
-const closePlanetInfo = () => (togglePlanetInfo.value = false);
+function closePlanetInfo() {
+  showPlanetInfo.value = false;
+}
 
-//===== get planet information for selected planet
 const planetDetails = computed(() => {
   return planetsArr.value.find((planet) => planet.name === planetName.value);
 });

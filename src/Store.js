@@ -9,7 +9,7 @@ export const useStore = defineStore("store", () => {
   const searchTerm = ref("");
   const sortKey = ref("");
   const planetName = ref("");
-  const togglePlanetInfo = ref(false);
+  const showPlanetInfo = ref(false);
   const sortAscDesc = ref(true);
 
   //===== fetch 'people' and 'planet' data from SWAPI, then cache in local storage
@@ -31,7 +31,7 @@ export const useStore = defineStore("store", () => {
     searchTerm,
     sortKey,
     planetName,
-    togglePlanetInfo,
+    showPlanetInfo,
     sortAscDesc,
     fetchAndSetAPIData,
   };

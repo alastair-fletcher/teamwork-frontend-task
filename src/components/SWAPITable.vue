@@ -10,7 +10,7 @@ const {
   searchTerm,
   sortKey,
   planetName,
-  togglePlanetInfo,
+  showPlanetInfo,
   sortAscDesc,
 } = storeToRefs(store);
 
