@@ -6,7 +6,7 @@ import { useStore } from "./Store";
 import { storeToRefs } from "pinia";
 const store = useStore();
 
-const { loading, togglePlanetInfo } = storeToRefs(store);
+const { loading, showPlanetInfo } = storeToRefs(store);
 </script>
 
 <template>
@@ -47,7 +47,7 @@ const { loading, togglePlanetInfo } = storeToRefs(store);
     </div>
 
     <SWAPITable />
-    <PlanetInfo v-if="togglePlanetInfo" />
+    <PlanetInfo v-if="showPlanetInfo" />
   </div>
 </template>
 

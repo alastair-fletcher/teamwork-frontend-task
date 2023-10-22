@@ -16,11 +16,9 @@ export const useStore = defineStore("store", () => {
   async function fetchAndSetAPIData(type, numOfPages, destPiniaArr) {
     loading.value = true;
     const data = await useSwapiTableLoader(type, numOfPages);
-      const localStorageData = JSON.parse(localStorage.getItem(type));
-      destPiniaArr.value.push(...localStorageData);
-    } catch (error) {
-      console.log(error);
-    }
+    localStorage.setItem(type, JSON.stringify(data));
+    const localStorageData = JSON.parse(localStorage.getItem(type));
+    destPiniaArr.value.push(...localStorageData);
     loading.value = false;
   }
 

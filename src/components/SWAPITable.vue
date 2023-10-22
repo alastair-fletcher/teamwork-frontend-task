@@ -2,6 +2,14 @@
 import { computed, onMounted, ref } from "vue";
 import { useStore } from "../Store";
 import { storeToRefs } from "pinia";
+import {
+  formatDateTime,
+  formatHeightMass,
+  headingData,
+  setSortKey,
+  setPlanetName,
+  separateUnknownAndNumericValues,
+} from "../utils";
 const store = useStore();
 const { fetchAndSetAPIData } = store;
 const {
@@ -16,16 +24,6 @@ const {
 
 const isActive = ref("");
 
-//========= table heading names and keys
-const headingData = [
-  { name: "Name", key: "name" },
-  { name: "Height", key: "height" },
-  { name: "Mass", key: "mass" },
-  { name: "Created", key: "created" },
-  { name: "Edited", key: "edited" },
-  { name: "Planet", key: "planetName" },
-];
-
 //========= check if data is in local storage, if not fetch from API
 onMounted(() => {
   const peopleData = localStorage.getItem("people");
@@ -39,12 +37,14 @@ onMounted(() => {
   }
 });
 
-//========= set key to sort data by, e.g. 'name', 'height' + toggle asc/desc
-const setSortKey = (key) => {
-  sortAscDesc.value = !sortAscDesc.value;
-  sortKey.value = key;
-  isActive.value = key;
-};
+function sort(key) {
+  setSortKey(key, sortKey, sortAscDesc, isActive);
+}
+
+function togglePlanetInfo(planetInf) {
+  setPlanetName(planetInf, planetName);
+  showPlanetInfo.value = true;
+}
 
 //========= make data filterable and sortable
 const filteredData = computed(() => {
@@ -78,23 +78,15 @@ const filteredData = computed(() => {
     //========= check if sortKey refers to 'mass' or 'height' (for sorting numerically)
     const isNumeric = ["mass", "height"].includes(sortKey.value);
 
-    //========= if sortKey IS for 'mass' or 'height', separate 'unknown' and numeric values
     if (isNumeric) {
-      const separateUnknownAndNumericValues = (column) => {
-        const unknown = [];
-        const numeric = [];
-        filtered.forEach((person) => {
-          person[column] === "unknown"
-            ? unknown.push(person)
-            : numeric.push(person);
-        });
-        return [numeric, unknown];
-      };
-
-      const [massNumerics, massUnknowns] =
-        separateUnknownAndNumericValues("mass");
-      const [heightNumerics, heightUnknowns] =
-        separateUnknownAndNumericValues("height");
+      const [massNumerics, massUnknowns] = separateUnknownAndNumericValues(
+        "mass",
+        filtered
+      );
+      const [heightNumerics, heightUnknowns] = separateUnknownAndNumericValues(
+        "height",
+        filtered
+      );
 
       //========= sort numerically and concatenate 'unknowns' to end
       const sortNumColumns = (columnType) => {
@@ -126,39 +118,19 @@ const filteredData = computed(() => {
   };
   return sorted();
 });
-
-//========= format date and time + separate for CSS styling
-const formatDate = (date) => new Date(date).toLocaleString().split(",");
-
-//========= add units to non 'unknown' data + remove annoying comma
-const formatHeightMass = (data, unit) => {
-  return data === "unknown" ? data : `${data.replace(",", "")} ${unit}`;
-};
-
-//========= set planet name to show popup with planet information
-const setPlanetName = (planetInf) => {
-  planetInf !== "unknown"
-    ? (planetName.value = planetInf)
-    : (planetName.value = "");
-  togglePlanetInfo.value = true;
-};
 </script>
 
 <template>
-  <!-- search filter input -->
   <input
     type="search"
     class="w-1/3 rounded-full p-4"
     placeholder="Search by name or planet ..."
     v-model="searchTerm"
   />
-
-  <!-- SWAPI table -->
   <div
     class="w-full overflow-auto my-8 max-h-[440px] rounded-lg scrollbar-rounded"
   >
     <table class="w-full bg-slate-50">
-      <!-- table headings -->
       <thead class="sticky top-0 z-1">
         <tr class="hover:cursor-pointer">
           <th
@@ -168,7 +140,7 @@ const setPlanetName = (planetInf) => {
             :class="{
               'column-active': heading.key === isActive,
             }"
-            @click="setSortKey(heading.key)"
+            @click="sort(heading.key, sortKey, sortAscDesc, isActive)"
           >
             <div class="flex items-center">
               <span>{{ heading.name }}</span>
@@ -198,8 +170,6 @@ const setPlanetName = (planetInf) => {
           </th>
         </tr>
       </thead>
-
-      <!-- table data -->
       <tbody>
         <tr
           v-for="person in filteredData"
@@ -212,25 +182,25 @@ const setPlanetName = (planetInf) => {
           <td class="p-3 w-24">
             <div class="flex flex-col align-start">
               <span class="text-xs font-bold">{{
-                formatDate(person.created)[0]
+                formatDateTime(person.created)[0]
               }}</span>
               <span class="text-xs text-stone-400">{{
-                formatDate(person.created)[1]
+                formatDateTime(person.created)[1]
               }}</span>
             </div>
           </td>
           <td class="p-3 w-24">
             <div class="flex flex-col align-start">
               <span class="text-xs font-bold">{{
-                formatDate(person.edited)[0]
+                formatDateTime(person.edited)[0]
               }}</span>
               <span class="text-xs text-stone-400">{{
-                formatDate(person.edited)[1]
+                formatDateTime(person.edited)[1]
               }}</span>
             </div>
           </td>
           <td
-            @click="setPlanetName(person.planetName)"
+            @click="togglePlanetInfo(person.planetName)"
             class="hover:cursor-pointer hover:font-bold p-3 w-24"
           >
             {{ person.planetName }}
